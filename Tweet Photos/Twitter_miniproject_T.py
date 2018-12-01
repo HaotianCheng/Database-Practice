@@ -1,5 +1,6 @@
 import tweepy
 import mysql.connector
+from pymongo import MongoClient
 import wget
 import os
 import subprocess
@@ -124,5 +125,11 @@ sqlFormula = "INSERT INTO history (email, content, type, num) VALUES (%s,%s,%s,%
 history1 = (email, contents, ctype, num)
 mycursor.execute(sqlFormula, history1)
 mydb.commit()
+
+myclient = MongoClient()
+mydb = myclient["mini3"]
+mycol = mydb["history"]
+mydict = {"email": email, "content": contents, "ctype": ctype, "num": num}
+mycol.insert_one(mydict)
 
 print('Complete!')
